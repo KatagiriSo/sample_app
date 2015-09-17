@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+    has_many :microposts, dependent: :destroy
+
     before_save { self.email = email.downcase }
     before_create :create_remember_token
     
@@ -9,7 +11,11 @@ class User < ActiveRecord::Base
     has_secure_password
     validates :password, length: { minimum: 6 }
     
-    
+    def feed
+        # このコードは準備段階です。
+        # 完全な実装は第11章「ユーザーをフォローする」を参照してください。
+        Micropost.where("user_id = ?", id)
+    end
     
     def User.new_remember_token
         SecureRandom.urlsafe_base64
